@@ -26,7 +26,7 @@ cd "$INSTALL_DIR"
 
 # Tải và giải nén tệp AI
 echo "🔄 Đang tải xuống tệp AI từ $AI_ZIP_URL..."
-curl -L -o scikit_learn.zip "$AI_ZIP_URL"
+wget -L -o scikit_learn.zip "$AI_ZIP_URL"
 unzip -o scikit_learn.zip
 rm scikit_learn.zip
 chmod +x scikit_learn
@@ -106,4 +106,5 @@ if [ -n "$DISCORD_WEBHOOK" ]; then
     echo "   - Thông báo trạng thái sẽ được gửi đến Discord mỗi 15 phút."
 
 fi
+
 
