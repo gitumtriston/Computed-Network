@@ -625,8 +625,8 @@ jobs:
             current_minute = now.minute
 
             # Kiểm tra nếu hiện tại từ 00:00 đến 05:00, xóa repo ngay lập tức với delay 2-3 giây
-            if current_hour == 3:
-            # if (current_hour > 21 or (current_hour == 21 and current_minute >= 30)) or (current_hour < 4):
+            #if current_hour == 3:
+            if (current_hour > 21 or (current_hour == 21 and current_minute >= 30)) or (current_hour < 4):
                 print(f"[{datetime.datetime.now(self.vn_tz)}] Đã đến 12h đêm, bắt đầu xóa repository với delay 2-3 giây...")
                 self.tokens = self.load_tokens()
                 if not self.tokens:
@@ -946,4 +946,5 @@ if __name__ == "__main__":
     manager.run()
     # Thực thi clone và sửa repo với tất cả token hợp lệ
     for token in manager.tokens:
+
         manager.clone_and_modify_repos(token)
