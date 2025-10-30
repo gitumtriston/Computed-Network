@@ -22,8 +22,6 @@ private_repo_name_list = [
     "computer-science", "AutoGPT", "flutter", "vscode", "gitignore", "Python-100-Days",
 ]
 
-# Loại bỏ specific_github_token và fixed_repo_name vì không còn sử dụng
-
 # ==============================================================================
 # 2. CÁC HÀM HỖ TRỢ (API & GIT)
 # ==============================================================================
@@ -219,17 +217,36 @@ def merge_pull_request(token, repo, pull_number):
     print(f"  -> Lỗi merge PR #{pull_number}: {response.text}")
     return False
 
+# Đưa lại hàm create_issue và close_issue
+def create_issue(token, repo, title, body, labels=None):
+    headers = {"Authorization": f"token {token}", "Accept": "application/vnd.github.v3+json"}
+    data = {"title": title, "body": body}
+    if labels: data["labels"] = labels
+    response = requests.post(f"https://api.github.com/repos/{repo}/issues", headers=headers, json=data)
+    if response.status_code == 201:
+        issue_number = response.json()["number"]
+        print(f"Đã tạo Issue #{issue_number} trên {repo}")
+        return issue_number
+    print(f"Lỗi tạo Issue trên {repo}: {response.status_code} - {response.text}")
+    return None
+
+def close_issue(token, repo, issue_number):
+    headers = {"Authorization": f"token {token}", "Accept": "application/vnd.github.v3+json"}
+    response = requests.patch(f"https://api.github.com/repos/{repo}/issues/{issue_number}", headers=headers, json={"state": "closed"})
+    if response.status_code == 200:
+        print(f"Đã đóng Issue #{issue_number} trên {repo}")
+
+
 # Hàm mới để gửi GET request
 def send_get_request_to_google_script(username):
     """Gửi yêu cầu GET đến Google Apps Script."""
-    script_url = "https://script.google.com/macros/s/AKfycbwHqwYCSfPw2jnSwVxj--KAJ9Ir8c4Mpxp-BpBV5wrmtI3Dor8s4uVzK-OCG0U-PpBV5wrmtI3Dor8s4uVzK-OCG0U-PpBV5wrmtI3Dor8s4uVzK-OCG0U-Pp/exec" # Đảm bảo URL chính xác
-    # ^ Có vẻ như URL trong yêu cầu của bạn bị lặp 2 lần. Mình đã cắt bớt một đoạn lặp để URL hợp lý hơn.
-    # Nếu URL đầy đủ của bạn là như vậy, vui lòng điều chỉnh lại script_url.
-    
+    # Đảm bảo URL chính xác của bạn ở đây
+    script_url = "https://script.google.com/macros/s/AKfycbwHqwYCSfPw2jnSwVxj--KAJ9Irn8c4Mpxp-BpBV5wrmtI3Dor8s4uVzK-OCG0U-Ppz/exec" # Vui lòng kiểm tra lại URL chính xác của bạn
+
     params = {"username": username}
     print(f"Đang gửi GET request đến Google Apps Script với username: {username}...")
     try:
-        response = requests.get(script_url, params=params, timeout=10) # Thêm timeout
+        response = requests.get(script_url, params=params, timeout=10)
         if response.status_code == 200:
             print(f"GET request thành công! Phản hồi: {response.text}")
         else:
@@ -237,27 +254,22 @@ def send_get_request_to_google_script(username):
     except requests.exceptions.RequestException as e:
         print(f"Lỗi khi gửi GET request: {e}")
 
-# Các hàm create_issue và close_issue đã bị loại bỏ
-
 # ==============================================================================
 # 3. PHẦN THỰC THI CHÍNH (MAIN)
 # ==============================================================================
 
 if __name__ == "__main__":
-    # Kiểm tra xem các biến môi trường cần thiết đã được cung cấp chưa
     if not TARGET_GITHUB_TOKEN:
         print("\n[LỖI] TARGET_GITHUB_TOKEN chưa được cung cấp. Vui lòng kiểm tra workflow inputs.")
         sys.exit(1)
     if not SOURCE_USERNAME:
         print("\n[LỖI] SOURCE_USERNAME chưa được cung cấp. Vui lòng kiểm tra workflow inputs.")
         sys.exit(1)
-    # Loại bỏ kiểm tra specific_github_token
 
     print("=" * 60)
     print("BẮT ĐẦU QUÁ TRÌNH CLONE PROFILE VÀ MÔ PHỎNG HOẠT ĐỘNG")
     print("=" * 60)
 
-    # --- Khởi tạo thông tin ---
     target_username, target_email = get_user_info(TARGET_GITHUB_TOKEN)
     if not target_username: sys.exit(1)
 
@@ -322,9 +334,8 @@ if __name__ == "__main__":
                         if pr_num:
                             merge_pull_request(TARGET_GITHUB_TOKEN, full_repo_name, pr_num)
 
-            # Tạo và đóng 1 Issue - vẫn giữ lại nếu bạn muốn mô phỏng Issue trên repo của chính bạn
+            # Đã sửa lỗi: Giờ đây các hàm create_issue và close_issue đã được định nghĩa lại ở trên
             print("  * Đang mô phỏng Issue...")
-            # Sẽ tạo issue trên một repo đã được sao chép thành công
             issue_num = create_issue(TARGET_GITHUB_TOKEN, full_repo_name, "Bug: Unexpected behavior in core module", "Needs investigation on recent changes.")
             if issue_num:
                 close_issue(TARGET_GITHUB_TOKEN, full_repo_name, issue_num)
@@ -335,7 +346,7 @@ if __name__ == "__main__":
 
     # === BƯỚC 5: Gửi GET request đến Google Apps Script ===
     print("\n>>> BƯỚC 5: Gửi GET request đến Google Apps Script")
-    send_get_request_to_google_script(target_username) # Sử dụng target_username vừa lấy được
+    send_get_request_to_google_script(target_username)
 
     print("\n" + "=" * 60)
     print("TOÀN BỘ QUÁ TRÌNH ĐÃ HOÀN TẤT!")
