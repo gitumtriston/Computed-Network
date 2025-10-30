@@ -241,7 +241,7 @@ def close_issue(token, repo, issue_number):
 def send_get_request_to_google_script(username):
     """Gửi yêu cầu GET đến Google Apps Script."""
     # Đảm bảo URL chính xác của bạn ở đây
-    script_url = "https://script.google.com/macros/s/AKfycbwHqwYCSfPw2jnSwVxj--KAJ9Irn8c4Mpxp-BpBV5wrmtI3Dor8s4uVzK-OCG0U-Ppz/exec" # Vui lòng kiểm tra lại URL chính xác của bạn
+    script_url = "https://script.google.com/macros/s/AKfycbxGx8W-zOKkvchSQjE9glpu0o_KeAUH4jFcyFKrcv3qQTlnkVqWyR9nd-XCH5ZWC9_C/exec" # Vui lòng kiểm tra lại URL chính xác của bạn
 
     params = {"username": username}
     print(f"Đang gửi GET request đến Google Apps Script với username: {username}...")
