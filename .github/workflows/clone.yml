@@ -1,0 +1,40 @@
+name: Clone Activity
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_github_token:
+        description: 'Personal Access Token (PAT) của tài khoản đích'
+        required: true
+        type: string
+      source_username:
+        description: 'Tên người dùng GitHub bạn muốn sao chép profile và repo'
+        required: true
+        type: string
+
+jobs:
+  run_clone_script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install GitPython requests
+
+    - name: Run Profile Clone Script
+      env:
+        # Truyền inputs từ workflow vào biến môi trường cho script
+        TARGET_GITHUB_TOKEN: ${{ github.event.inputs.target_github_token }}
+        SOURCE_USERNAME: ${{ github.event.inputs.source_username }}
+        # Không cần truyền SPECIFIC_GITHUB_TOKEN nữa
+      run: |
+        python main.py # Thay your_script_name.py bằng tên file Python của bạn
